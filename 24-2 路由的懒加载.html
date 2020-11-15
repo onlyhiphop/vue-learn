@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>路由懒加载</title>
+		<script src="./lib/vue.js"></script>
+		<script src="./lib/vue-router.js" ></script>
+	</head>
+	<body>
+		<!-- 
+			在做一个大项目的时候，当打包构建应用时，js包会变得非常的大，影响页面加载。
+			一次性从服务器请求下来，可能需要花费一定的时间，甚至用户的电脑还出现了短暂空白的情况
+			
+			解决：
+			如果我们能把不同路由对应的组件分割成不同的代码块，当路由被访问的时候才加载组件，这样就更加高效了
+			
+			路由懒加载：
+			主要是将路由对应的组件打包成一个个的js代码块
+			只有这个路由被访问到的时候，才加载对应的组件
+		 -->
+	</body>
+	<script>
+		const router = new VueRouter({
+			routes: [
+				{   //路由懒加载的写法
+					path: '/home', 
+					component: () => import('../components/Home')
+				}
+			]
+		})
+		
+		const vm = new Vue({
+			router
+		})
+	</script>
+</html>

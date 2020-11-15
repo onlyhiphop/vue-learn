@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./lib/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+
+        <!-- 
+            name 属性可以省略
+         -->
+        <h3>单选按钮测试</h3>
+        <label for="man">
+            <input id="man" type="radio" value="男" v-model="sex">男</input>
+        </label>
+        <label for="woman">
+            <input id="woman" type="radio" value="女" v-model="sex" >女</input>
+        </label>
+        <br>
+        选择的值为： {{ sex }}
+
+        <hr>
+
+        <input type="checkbox" value="篮球" v-model="hobbies">篮球
+        <input type="checkbox" value="足球" v-model="hobbies">足球
+        <input type="checkbox" value="街舞" v-model="hobbies">街舞
+        <input type="checkbox" value="吃饭" v-model="hobbies">吃饭
+        <br>
+        选择的值为： {{ hobbies }}
+
+
+        <hr>
+        <select name="fruits" id="" v-model="fruits">
+            <option value="香蕉">香蕉</option>
+            <option value="苹果">苹果</option>
+            <option value="西瓜">西瓜</option>
+            <option value="榴莲">榴莲</option>
+        </select>
+        选择的水果是： {{ fruits }}
+
+        
+    </div>
+</body>
+<script>
+    const app = new Vue({
+        el: '#app',
+        data: {
+            sex: '男',   //可以设置默认值
+            hobbies: [],
+            fruits: '苹果'
+        },
+        methods: {
+
+        }
+    })
+</script>
+</html>

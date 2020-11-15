@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../lib/vue.js"></script>
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body>
+    <div id="app">
+       
+        <!-- 注意：事件名称不能用驼峰法 -->
+        <top-tab @parent-load="loadList"></top-tab>
+
+        <ul class="list-group">
+            <li class="list-group-item" v-for="item in lists" :key="item.id">
+                <span class="badge">评论人：{{ item.username }}</span>
+                {{ item.content }}
+            </li>
+        </ul>
+       
+    </div>
+
+    <template id="tmp1">
+        <div>
+            <div class="form-group">
+                <label>评论人：</label>
+                <input type="text" v-model="username" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>评论内容：</label>
+                <input type="text" v-model="content" class="form-control">
+            </div>
+            <div class="form-group">
+                <input type="button" @click="add" value="发表评论" class="btn btn-primary">
+            </div>
+            
+        </div>
+    </template>
+
+</body>
+<script>
+
+    var tmp1 = {
+        template: '#tmp1',
+        data(){
+            return {
+                username: '',
+                content: '',
+            }
+        },
+        methods: {
+            add(){
+                 //第一种：使用localStorage
+                // //这里不使用数据库，我们使用localStorage
+                // var objData = {id: Date.now()*Math.random(),username: this.username, content: this.content}
+                // //存入本地
+                // localStorage.setItem('sendData', JSON.stringify(objData))
+                // //刷新页面，重新加载数据
+                // //调用父组件的方法
+                // this.$emit('parent-load')
+
+                //第二种：组件传值
+                var objData = {id: Date.now()*Math.random(),username: this.username, content: this.content}
+                this.$emit('parent-load', objData)
+            }
+        }
+    }
+
+    var vm = new Vue({
+        el: '#app',
+        data: {
+            lists: [
+                { id: Date.now()*Math.random(), username: '张三', content: '我要上镜'},
+                { id: Date.now()*Math.random(), username: '李四', content: '我最强王者了'},
+                { id: Date.now()*Math.random(), username: '王五', content: '你们在哪里，我上天了'}
+            ]
+        },
+        methods: {
+            loadList(data1){
+                
+                //第一种：使用localStorage
+                // var sendData = localStorage.getItem('sendData');
+                // if(sendData){
+                //     // JSON.parse() 方法，如果是 空字符 会报错，所以要做处理
+                //     this.lists.unshift(JSON.parse(sendData || '{}'))
+                // }
+
+                //第二种：组件传值
+                if(data1){
+                    this.lists.unshift(data1)
+                }
+            }
+        },
+        components: {
+            'topTab': tmp1
+        },
+        created(){
+            this.loadList()
+        }
+    })
+</script>
+</html>

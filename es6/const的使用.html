@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- 
+        使用const修饰的标识符为常量，不可以再次赋值
+
+        当我们修饰的标识符不会被再次赋值时，就可以使用const来保证数据的安全性
+        建议：在ES6开发中，优先使用const，只有需要改变某一个标识符的时候才使用let
+     -->
+</body>
+<script>
+    // 1、会报错，因为const定义的是常量，不能被修改
+    const a = 'why';
+    a = 'name'
+
+    //2、会报错，const定义的变量必须赋初始值
+    const b;     
+
+    //3、指向对象时，可以改变对象中的内部属性值，但不可以改变引用的对象
+    const obj = {
+        name: 'xaioming',
+        age: 18
+    }
+
+    obj.name = 'xiaohong';   //正确
+    obj = {}  //错误
+</script>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>前端路由</title>
+    <script src="./lib/vue.js"></script>
+    <script src="./lib/vue-router.js" ></script>
+    <style>
+        .myActive{
+            color: red;
+            font-size: 30px;
+            background-color: green;
+        }
+    </style>
+</head>
+<body>
+    <!--
+        前端路由： 
+        对于单页面应用程序来说，主要通过URL中的hash(#号) 来实现不同页面之间的切换，同时，hash有一个特点，HTTP请求红
+        不会包含hash相关的内容，所以单页面程序中的页面跳转主要用hash实现
+     -->
+     <div id="app">
+
+        <!-- 
+            如果使用原生的 a 标签来跳转
+            注意：这个#号不能漏 -->
+        <a href="#/login">登录</a>
+        <a href="#/register">注册</a>
+
+        <hr>
+
+        <!-- 使用 router-link 就不需要写 # 号
+            tag: (默认渲染成a标签) ，如果要渲染成其他标签  加上 tag属性
+			replace: 加上此属性后，会变成history.replaceState 来跳转页面，不会有入栈出栈操作
+            可以在url上直接传值
+                1、 ? 接 & 传值
+                2、使用 :属性名称 如： :id   表示占位符
+				
+			$router 和 $route的区别
+			1、$router 相当于 VueRouter 对象
+			2、$route 相当于 VueRouter中的routes 属性中的 一项，当前活跃状态的路由对象
+        -->
+        <router-link to="/login?id=10" replace>登录(router-link) </router-link>
+        <router-link :to="{path: '/login', query: {id: '10', name: '名称'}}"></router-link>
+
+        <router-link to="/register/10" tag="span" >注册(router-link)</router-link>
+		
+		<!-- 也可以使用绑定，将占位符的变成变量 -->
+        <router-link :to="'/register/' + paramId" tag="span" >注册(router-link)</router-link>
+
+		<!-- 使用全局的route对象来跳转 -->
+		<button @click="btnGo">使用route对象跳转</button>
+
+        <!-- 指定一个路由容器，用来放跳转的页面
+            作为占位符，匹配到的组件会展示到这个 router-view 中
+        -->
+        <router-view></router-view>
+     </div>
+
+     <template id="tmp1">
+        <h3>这是登录页面 -- url中id值为： {{ id }}  -- {{ $route.query.id }}</h3>
+     </template>
+
+     <template id="tmp2">
+        <h3>这是注册页面 -- url中id值为： {{ id }}  -- {{ $route.params.id }}</h3>
+     </template>
+</body>
+<script>
+
+    var login = {
+        template: '#tmp1',
+        data(){
+            return {
+                id: '',
+				paramId: ''
+            }
+        },
+        created(){
+
+            //route对象
+            console.log(this.$route);
+            
+            this.id = this.$route.query.id
+            console.log(this.$route.query.id);
+            
+        }
+    }
+
+    var register = {
+        template: '#tmp2',
+        data(){
+            return {
+                id: ''
+            }
+        },
+        created(){
+            this.id = this.$route.params.id
+        }
+    }
+
+    // 创建一个路由对象，当导入 vue-router包之后， 在window全局对象中，就有一个路由的构造函数，就做VueRouter
+    var routerObj = new VueRouter({
+        routes: [  //路由匹配规则
+            //每个路由规则都是一个对象，这个对象中有两个必须的属性：
+                // 属性1 path，表示监听哪个路由链接地址；
+                // 属性2 component 组件模板对象， 表示 如果路由是前面匹配到的path，则展示component属性对象的那个组件
+            {path: '/login', component: login},
+            {path: '/register/:id', component: register},
+            {path: '/', redirect: '/login'}   //使用重定向设置默认页
+        ],
+		// mode: 'history',		//使用history的形式
+        linkActiveClass: 'myActive'   //设置点击后的样式
+    })
+
+    var vm = new Vue({
+        el: '#app',
+        data: {
+
+        },
+        methods: {
+			btnGo(){
+				//使用$router	对象
+				this.$router.push('/register')
+                this.$router.push({path: '/register', query: {id: 10, name: '注册'}})
+			}
+        },
+        router: routerObj       //将路由规则对象，注册到vm实例上，用来监听URL地址的变化，然后展示对应组件
+    })
+
+</script>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue.js"></script>
+  
+</head>
+<body>
+    <div id="app">
+       <label>ID:
+            <input type="text" v-model="id"/>
+       </label>
+       <label>Name:
+            <input type="text" v-model="value"/>
+       </label>
+       <input type="button" value="添加" @click="add">
+       <p v-for="(user, index) in userList" :key="user.ID">
+           <input type="checkbox" />{{user.ID}} --- {{user.name}}
+       </p>
+       <!-- 出现bug，选中第二项的checkbox，在头部添加后，第二项变成了第三项，但是是选中的第二项 
+        解决：使用 key 去绑定唯一表示
+        注意：可以只能是 number 或者 string 不能是 object （老版本会报错，新版本是警告）
+
+        原理： 如果不使用key的话，如果在数组中间插入元素，它在虚拟dom中渲染过程是，
+                是直接将插入那个位置的元素替换成新的，然后其他元素往后移位置，（类似顺序表的增加）
+                当虚拟dom渲染到真实页面时，使用diff算法，找到不同的部分去改变，就会重复虚拟dom的那样的操作
+
+              如果使用了key，而且这个key必须和对象一一对应（index是不行的，没有直接关联的关系），
+              这样元素标签和值就一一对应起来，就不会重新绑定，它就会直接创建一个元素，插入到那中间，不用移动其他元素（类似链表的增加）
+        -->
+    </div>
+</body>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                id: '',
+                value: '',
+                userList: [
+                    {ID: 1, name: 'a'},
+                    {ID: 2, name: 'b'},
+                    {ID: 3, name: 'c'},
+                ]
+            },
+            methods: {
+                add(){
+                    // this.userList.push({ID: this.id, name: this.value})  在尾部添加
+                    this.userList.unshift({ID: this.id, name: this.value})   //在头部添加
+                }
+            }
+        })
+    </script>
+</html>

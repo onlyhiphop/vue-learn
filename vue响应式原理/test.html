@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        function createPerson(name){
+            this.name = name;
+
+            this.showName = function(){
+                alert(this);
+            }
+
+            function showName2(){
+                alert(this)
+            }
+        }
+        var obj1 = new createPerson('blue');
+        var obj2 = new createPerson('red');
+        alert(obj1.showName == obj2.showName)  //false
+        alert(obj1.showName2 == obj2.showName2)  //true
+
+        obj1.showName()   //[object Object]
+        alert('-------------')
+        // obj1.showName2()  //报错  不是一个函数
+        // createPerson().showName2()  //报错，不能找到showName2属性
+        new createPerson().showName2  //执行成功[object Object]
+        new createPerson().showName()  //[object Object]
+        function show(){
+            alert(this)
+        }
+        show()  //[object Window]
+    </script>
+</head>
+<body>
+    
+</body>
+</html>

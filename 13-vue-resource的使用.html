@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./lib/vue.js"></script>
+    <!-- 要在vue之后导入 -->
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue-resource/1.5.1/vue-resource.min.js"></script>
+</head>
+<body>
+    <!--
+        除了使用vue-resouce之外，还有axios
+        vue-resource在Vue对象上，挂载了 $http 对象
+    -->
+    <div id="app">
+
+    </div>
+</body>
+<script>
+    var vm = new Vue({
+        el: '#app',
+        data: {
+
+        },
+        methods: {
+            getInfo(){
+                Vue.$http.get('http://vue.studyit.io/api/getlunbo').then(function(result){
+                    console.log(result.body);
+                })
+            },
+            postInfo(){
+                //第一个参数是 data， 第二个参数是option 配置
+                //emulateJSON: true 表示已表单的格式发送，  application/x-www-form-urlencoded
+                Vue.$http.post('http://vue.studyit.io/api/getlunbo', {}, {emulateJSON: true}).then(function(result){
+                    console.log(result.body);
+                })
+            },
+            jsonpInfo(){
+                Vue.$http.jsonp('http://vue.studyit.io/api/getlunbo').then(function(result){
+                    console.log(result.body);
+                })
+            }
+        }
+    })
+</script>
+</html>

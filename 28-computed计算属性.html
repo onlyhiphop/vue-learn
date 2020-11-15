@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Computed属性的使用</title>
+    <script src="./lib/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <input type="text" v-model="firstname">
+        <input type="text" v-model="lastname">
+        <input type="text" v-model="fullname">
+
+        <hr>
+        <!-- 
+            计算属性和methods都能实现此功能。
+            但是，如果 fullname需要使用多次，方法就会调用多次，
+            而计算属性只需要执行一次就够了，性能更高，做了一层缓存
+         -->
+        再次使用：
+        {{ fullname }}
+
+        使用方法：
+        {{ getFullName() }}
+    </div>
+</body>
+<script>
+    var vm = new Vue({
+        el: '#app',
+        data: {
+            firstname: '',
+            lastname: ''
+        },
+        methods: {
+            getFullName(){
+                console.log('调用了方法-------');
+                
+                return this.firstname + this.lastname;
+            }
+        },
+        //可以定义一些属性，这些属性叫做 计算属性， 计算属性的本质就是一个方法，只不过，我们在
+        //使用这些计算属性的时候，是把它们的名称直接当做属性来使用的。并不会把计算属性当做方法是调用
+
+        /**
+        注意：计算属性里面的，它是一个属性，而不是一个方法
+        原理：其实就是调用计算属性中的set和get方法
+        **/
+        computed: {
+            'fullname': function(){
+
+                console.log('执行了计算属性----------');  //用来测试是否缓存
+                
+                //注意：只要函数中使用到的data中的任何属性发生了变化，都会重新计算这个属性值
+                //注意：计算属性的求值结果，会被缓存起来，方便下次直接调用
+                // 如果这里的任何值没有发生改变，则不会重新去计算这个属性
+                return this.firstname + ' --- ' + this.lastname
+            },
+
+            fullname2: {
+                set: function(newVal){   //一般都不写set方法
+                    console.log('--------------');
+                    console.log(newVal);
+                    this.firstname = newVal.split(" ")[0]
+                    this.lastname = newVal.split(" ")[1]
+                },
+                get: function(){
+                    return this.firstname + ' ' + this.lastname
+                }
+            }
+        }
+    })
+</script>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./lib/vue.js"></script>
+</head>
+<body>
+
+    <template id="tmp1">
+        <div>
+            <h3>自定义组件------</h3>
+            <p>取组件自带的data值， {{ msg }}</p>
+            <br>
+            <h3>计数器功能-------</h3>
+            <input type="button" @click="add" value="添加" />
+            <span>{{ count }}</span>
+        </div>
+    </template>
+
+    <div id="app">  
+        <mycom></mycom>
+        <hr>
+        <mycom></mycom>
+        <hr>
+        <mycom></mycom>
+    </div>
+
+</body>
+<script>
+
+    /**
+        1、组件可以有自己的data，但是必须是方法 ，而且要返回一个对象
+
+        为什么data 必须是一个方法，而且返回一个对象？？
+        保证每一个引入次组件的，都有一个独立的data对象，互相不影响
+
+    */
+
+    Vue.component('mycom', {
+        template: '#tmp1',
+        data: function(){
+            return {
+                msg: '这是组件中的data数据',
+                count: 0
+            }
+        },
+        methods: {
+            add(){
+                this.count++
+            }
+        }
+    })
+
+    var vm = new Vue({
+        el: '#app',
+        data: {
+
+        },
+        methods: {
+
+        }
+    })
+
+</script>
+</html>

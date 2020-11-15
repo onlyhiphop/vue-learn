@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+	</body>
+	<script>
+		// Promise 需要传入一个函数
+		// 传入的函数有两个参数：resolve和reject，它们都是函数
+		new Promise((resolve, reject) => {
+			console.log('do some thing')
+			var d = 1 + 1   //实际数据请求
+			resolve(d)		//将请求的数据处理
+			
+			if(d == 2){
+				reject(d)
+			}
+			
+		}).then(res => {
+			console.log(res)  //  2
+		}).catch(err => {
+			console.log(err)  // 2
+		})
+		
+		
+		Promise.all([
+			new Promise((resolve, reject) => {
+				setTimeout(function(){   //用setTImeout来模拟ajax请求
+					resolve({name: '1name', age: 1})
+				}, 2000)
+			}),
+			new Promise((resolve, reject) => {
+				setTimeout(function(){
+					resolve({name: '2name', age: 2})
+				}, 1000)
+			})
+		]).then(results => {
+			console.log(results)
+		})
+	</script>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>vue过滤器</title>
+    <script src="./lib/vue.js"></script>
+</head>
+<body>
+    <!-- 
+        vue过滤器：
+         1、vue允许你自定义过滤器，可被用作一些常用的文本格式化：如时间格式
+         2、可以用在两个地方； mustache 插值、和 v-bind 表达式
+         3、过滤器应该被添加在JavaScript表达式的尾部，由“管道”符提示；
+        
+         语法：
+         第一个参数已经被固定了，永远都是过滤器管道符前面传递过来的数据
+         Vue.filter('过滤器的名称', function(data){})
+
+         使用：
+         {{name | 过滤器的名称}}
+        -->
+    <div id="app">
+        <p>{{ msg | msgFormat }}</p> 
+        <p>{{ msg | msgFormat('加参数') }}</p>
+
+        <!-- 过滤器可以串联，将前一个过滤器的结果会传到下一个过滤器 -->
+        <p>{{ msg | msgFormat('加参数') | lastFormat('---') }}</p>
+    </div>
+
+    <div id="app2">
+        {{ dt | dateFormat('yyyy-mm-dd')}}
+        {{ dt | dateFormat()}}
+    </div>
+</body>
+<script>
+    // 1、定义一个全局的过滤器, 每一个Vue实例都能使用
+    Vue.filter('msgFormat', function(data, arg1){
+        if(arg1){
+            return data.replace('b', arg1)
+        }
+        // return data.replace('b', 'd')
+        return data.replace(/b/g, 'd')
+    }); 
+
+    Vue.filter('lastFormat', function(data, arg1){
+        if(arg1){
+            return data + arg1;
+        }
+        return data + "=====";
+    })
+
+    var vm = new Vue({
+        el: '#app',
+        data: {
+            msg: 'aaaaaaaaaaabaaa'
+        },
+        methods: {
+
+        }
+        // 2、定义私有过滤器
+        ,filters: {
+            privateFormat: function(){
+
+            }
+        }
+    })
+
+    var vm2 = new Vue({
+        el: '#app2',
+        data: {
+            dt: new Date()
+        },
+        methods: {
+            
+        },
+        filters: {
+            dateFormat(data, pattern=""){
+
+                function completeStr(num){
+                    return num.toString().padStart(2, '0');
+                }
+
+                //根据给定的时间字符串，得到特定的时间
+
+                //调用es6中字符串方法 padStart(maxLength, fillString='') 或padEnd(maxLength, fillString='')
+                //来给头或尾填充字符
+                var dt = new Date(data)
+                var y = dt.getFullYear();
+                var m = (dt.getMonth() + 1).toString().padStart(2, '0');
+                var d = dt.getDate().toString().padStart(2, '0')
+
+                if(pattern.toLowerCase() === 'yyyy-mm-dd'){
+                    return `${y}-${m}-${d}`
+                }else{
+                    var hh = completeStr(dt.getHours())
+                    var mm = completeStr(dt.getMinutes())
+                    var ss = completeStr(dt.getSeconds())
+                    return `${y}-${m}-${d} ${hh}-${mm}-${ss}`
+                }
+
+            }
+        }
+    })
+    
+</script>
+</html>

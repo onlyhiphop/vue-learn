@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./lib/vue.js"></script>
+</head>
+<body>
+
+    <!-- 
+        使用template标签内写HTML模板
+        注意：需要在Vue控制的app模块外面
+     -->
+
+    <template id="tmp1">
+        <!-- div作为根元素 -->
+        <div>  
+            <h3>这是通过template元素，在外部定义的组件结构，这个方式，有代码的智能提示和高亮</h3>
+        </div>
+    </template>
+
+    <div id="app">
+        <mycom3></mycom3>
+    </div>
+
+    <div id="app2">
+        <mycom3></mycom3>
+
+        <!-- 私有的组件 -->
+        <private-com></private-com>
+
+        <private-com2></private-com2>
+    </div>
+
+    <template id="privateTmp">
+        <h3>私有的外部组件方式</h3>
+    </template>
+
+</body>
+<script>
+
+    // 第三种
+    // 这样写的都是全局的组件
+   Vue.component('mycom3', {
+       template: '#tmp1'
+   })
+
+    var vm = new Vue({
+        el: '#app',
+        data: {
+
+        },
+        methods: {
+
+        }
+    })
+
+    var vm = new Vue({
+        el: '#app2',
+        components: {   //定义实例私有的内部组件
+            privateCom: {
+                template: '<h3>app2私有的组件</h3>'
+            },
+            privateCom2: {
+                template: '#privateTmp'
+            }
+        }
+    })
+</script>
+</html>

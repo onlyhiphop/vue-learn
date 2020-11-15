@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<!-- 
+		commonJs是模块化规范中的其中一种，nodejs用的就是这个规范
+		 
+		 在下面这样直接写，是不能识别的，要有node环境才能解析这种写法
+		 -->
+		
+	</body>
+	
+	<!-- 导出模块 -->
+	<script>
+		var name = 'xiaoming'
+		functino sum(a,b){
+			return a+b;
+		}
+		module.exports = {
+			// name: name,
+			// sum: sum
+			name,  //es6字面增长量写法
+			sum
+		}
+	</script>
+	
+	<!-- 导入模块 -->
+	<script>
+		// 使用了es6的参数解析 写法
+		let {name, sum} = require('./xxx.js')
+		
+	</script>
+</html>

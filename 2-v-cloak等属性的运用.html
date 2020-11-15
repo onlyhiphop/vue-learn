@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- 导入vue.js -->
+    <script src="./lib/vue.js"></script>
+    <style>
+        /* 只要涉及到 v-cloak 的属性都用这个样式 */
+        [v-cloak]{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="app">
+        <p v-cloak>{{ msg }}</p>   <!-- 如果网速慢的话，{{ msg }}会出现在页面，所以我们要加上v-cloak -->
+        <h3 v-text="msg"></h3>  <!-- 使用 v-text就不存在这个问题，因为它原本里面就没内容-->
+        <!-- 第二个区别，v-text会覆盖里面所有内容，但{{msg}}只是占位符 -->
+        <!-- 这两个输出文本，都会将里面的标签转义 -->
+        <div v-text="htmlText"></div>
+
+        <!-- 要不转义，要使用v-html -->
+        <div v-html="htmlText"></div>
+    </div>
+
+    <script>
+
+    var vm = new Vue({
+        el: '#app',    //表示，当前我们new的这个Vue实例，要控制页面上的那个区域
+        data: {         //存放el中要用到的数据
+            msg: '欢迎学习Vue',   //通过Vue提供的指令很方便的就能吧数据渲染到页面中，不用再手动操作ddom元素了【因为不提倡直接操作dom元素了】
+            htmlText: '<h1>标题</h1>'
+        }
+    })
+    </script>
+</body>
+</html>

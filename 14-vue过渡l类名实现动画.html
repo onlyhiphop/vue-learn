@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./lib/vue.js"></script>
+
+    <!-- 自定义两组样样式来实现动画 -->
+    <style>
+        /* v-enter 是进入之前，元素的起始状态，此时还没有开始进入 */
+        /* v-leave-to 是动画离开之后，离开的终止状态，此时动画已经结束了 */
+        .v-enter,
+        .v-leave-to{
+            opacity: 0;   /*透明度*/
+            transform: translateX(150px);
+        }
+
+        /* v-enter-active 入场动画的时间段 */
+        /* v-leave-active 离场动画的时间段 */
+        .v-enter-active,
+        .v-leave-active{
+            transition: all 0.8s ease;
+        }
+
+
+        .my-enter,
+        .my-leave-to{
+            opacity: 0;   /*透明度*/
+            transform: translateY(150px);
+        }
+
+        /* v-enter-active 入场动画的时间段 */
+        /* v-leave-active 离场动画的时间段 */
+        .my-enter-active,
+        .my-leave-active{
+            transition: all 0.8s ease;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- 
+        动画进入（Enter）过程：
+        v-enter： 进入动画之前的开始状态 (时间点)
+        v-enter-active： 进入动画的时间段 （时间段）
+        v-enter-to：进入动画之后结束状态 (时间点)
+
+        动画结束（Leave）过程：
+        v-leave：即将离开之前的起始状态 (时间点)
+        v-leave-active：离开动画的时间段（时间段）
+        v-leave-to：离开之后的结束状态 (时间点)
+     -->
+    <div id="app">
+        <!-- 一般做法：没有过渡动画 -->
+        <h3 v-show="flag">普通显示和隐藏</h3>
+        <input type="button" value="显示" @click="hShow" />
+
+        <!-- 使用Vue官方提供的transition元素 -->
+        <!-- 
+            1、把需要被动画控制的元素包裹起来 
+            2、自定义两组样式，来控制transition 内部的元素实现动画
+        -->
+
+        <br>
+        <transition>
+            <h3 v-show="flag">VUE的transition元素</h3>
+        </transition>
+
+
+        <br>
+        <transition name="my">
+            <h3 v-show="flag">自定义前缀</h3>
+        </transition>
+    </div>
+</body>
+<script>
+    var vm = new Vue({
+        el: '#app',
+        data: {
+            flag: false
+        },
+        methods: {
+            hShow(){
+                this.flag = !this.flag
+            }
+        }
+    })
+</script>
+</html>

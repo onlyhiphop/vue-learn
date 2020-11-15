@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    var books = [
+        {id: 1, name: 'java程序设计', price: 100},
+        {id: 2, name: 'javascrpit程序设计', price: 100},
+        {id: 3, name: '算法导论', price: 100}
+    ]
+
+    for (let i in books){
+        console.log(books[i].name);
+    }
+
+    for(let book of books){
+        console.log(book.name);
+    }
+
+    // filter / map /reduce
+    const nums = ['10', '212', '434', '21', '3432']
+
+    //1、filter： 会返回一个数组
+    //参数为一个回调函数： 必须要返回一个boolean值
+    // 当返回为true时，函数内部会自动将这次回调的 n 加入到新的数组中
+    // 当返回为false时，函数内部会过滤掉这次的n
+    let newNum = nums.filter(function(n){
+        return n < 100;
+    })
+
+    //2、map函数的使用 （返回的是一个数组）
+    //将每次返回的数组，重新组装成一个数组
+    //参数n：每一次遍历的项
+    let new2Num = nums.map(function(n){
+        return n*2
+    })
+
+    //3、reduce函数的使用（返回的是一个数字，或者字符）
+    // reduce作用对数组中共所有的内容进行汇总
+    //参数一：回调函数
+    //          也有两个参数：参数一：初始化值，可以在reduce参数二中设置，参数二：遍历的每一项
+    //参数二：初始化值
+    const numsR = ['10', '212', '434', '21', '3432']
+    numsR.reduce(function(preVal, n){
+        return 100;
+
+        //过程：
+        //第一次： preVal为0，n为10
+        //第二次： preVal为100，n为212
+        //第三次： preVal为100，n为434
+        // ....
+
+    }, 0)  //初始化第一项的preValue为0
+
+    //使用reduce做一个累加
+    let total = numsR.reduce(function(preVal, n){
+        return preVal + n;
+    }, 0)
+
+
+    //函数式编程
+    let total  = nums.filter(function(n){
+        return n < 100;
+    }).map(function(n){
+        return n*2;
+    }).reduce(function(preVal, n){
+        return preVal + n;
+    }, 0)
+
+    //es6简洁写法
+    let total = nums.filter(n => n < 100).map(n => n*2).reduce((preVal, n) => preVal + n);
+</script>
+</html>
