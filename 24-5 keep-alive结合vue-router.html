@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>keep-alive</title>
+    <script src="./lib/vue.js"></script>
+    <script src="./lib/vue-router.js" ></script>
+</head>
+<body>
+
+<!-- 
+    问题：
+    在切换路由都时候，组件会被重新渲染，不能保持状态
+
+    1、keep-alive是vue内置的一个组件，可以使被包含的组件保留状态，或避免重新渲染
+        使用keep-alive后，组件会多 activated 和 deactivated 函数
+        注意：当deactivated函数执行的时候，路由已经变化了
+    2、router-view 也是一个组件，如果直接被包在keep-alive里面，所有路径匹配到的视图组件都会被缓存
+    
+    3、具有两个属性： 
+        填组件的name属性名称，多个用都好隔开
+        include：字符串或正则表达，只有匹配的组件会被缓存
+        exclude： 字符串或正则表达式，任何匹配的组件都不会被缓存
+
+    注意：
+    当多个路由共用一个组件时，它也不会重新创建
+    但是我们可以通过  
+    1、使用watch来监听路由的变化，获取路径的传值，再来改变对应的数据
+    2、在router-view  中 使用 :key 只要保持每个路由对应的key不一样, 就会强制不复用组件，重新渲染
+    3、使用vue-router的钩子函数 beforeRouteEnter beforeRouteUpdate beforeRouteLeave
+ -->
+
+    <div id="app">
+        <router-link :to="{path: '/list'}">列表</router-link>
+        <router-link :to="{path: '/profile'}">我的</router-link>
+        <keep-alive>
+            <router-view exclude="profile">    
+            </router-view>
+        </keep-alive>
+    </div>
+
+    <template id="listTmp">
+        <div>
+            <h3>数据列表 xxxx</h3>
+            <router-link to="/list/detail1">点击查看详情11</router-link>
+            <router-link to="/list/detail2">点击查看详情22</router-link>
+            <keep-alive>
+                <router-view :key="$route.fullPath" >
+                    <h4>详情页面：</h4>
+                </router-view>
+            </keep-alive>
+        </div>
+    </template>
+
+    <template id="detailTmp">
+        <div style="width: 50px;height: 50px;background-color: green;">
+            {{ path }}
+        </div>
+    </template>
+
+    <template id="myTmp">
+        <div>
+            <h3>我的信息</h3>
+        </div>
+    </template>
+</body>
+<script>
+
+    const listTmp = {
+        template: '#listTmp',
+        data(){
+            return {
+
+            }
+        },
+        beforeRouteUpdate(to, from, next){
+            console.log('beforeRouteUpdate：' + this.$route.fullPath);
+            next();
+        },
+        created(){
+        },
+        /**
+            组件状态（不属于生命周期）
+        **/
+        activated(){
+            //组件活跃状态
+            console.log('listTmp activited....');
+        },
+        deactivated(){
+            //组件不活跃状态
+            console.log('listTmp deactivated....');
+            //发现路由已经变化了
+            console.log(this.$route.path);
+        },
+        beforeRouteLeave(){
+            console.log('beforeRouteLeave--------');
+            console.log(this.$route.path);
+        }
+    }
+
+    const detailTmp = {
+        template: '#detailTmp',
+        data(){
+            return {
+                path: ''
+            }
+        },
+        created(){
+            console.log('detail页面----create--------');
+            this.path = this.$route.path;
+
+        },
+        watch: {
+            "$route": function(){
+                console.log('路由改变---------');
+                this.path = this.$route.path;
+            }
+        },
+        /**
+            组件状态（不属于生命周期）
+        **/
+        activated(){
+            //组件活跃状态
+            console.log('detailTmp activited....');
+        },
+        deactivated(){
+            //组件不活跃状态
+            console.log('detailTmp deactivated....');
+        }
+    }
+
+    const myTmp = {
+        name: 'profile',
+        template: '#myTmp',
+        data(){
+            return {
+            }
+        },
+        created(){
+        }
+    }
+
+    const router = new VueRouter({
+        routes: [
+            {
+                path: '/list', 
+                component: listTmp,
+                children: [
+                    {path: 'detail1',query:{msg: '这是详情1111'}, component: detailTmp},
+                    {path: 'detail2',query:{msg: '这是详情2222'}, component: detailTmp}
+                ]
+            },
+            {path: '/profile', component: myTmp},
+            {path: '/', redirect: '/profile'}
+        ]
+    })
+
+    const vm = new Vue({
+        el: '#app',
+        data: {
+
+        },
+        methods: {
+
+        },
+        router
+    })
+</script>
+</html>

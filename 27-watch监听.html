@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>watch监听</title>
+    <script src="./lib/vue.js"></script>
+    <script src="./lib/vue-router.js"></script>
+</head>
+<body>
+    <div id="app">
+
+        <!-- 
+            第一种：加上keyup等事件
+            第二种：watch 
+                使用这个属性，可以监视data中指定数据的变化，然后出发这个watch中对应的function处理函数
+         -->
+
+        <input type="text" v-model="firstname" @keyup="getFullName">
+        <input type="text" v-model="lastname">
+        <input type="text" v-model="fullname">
+
+
+        <hr>
+         <!-- 还可以监听路由的变化 -->
+         <router-link to="/login">登录</router-link>
+         <router-link to="/register">注册</router-link>
+         <router-view></router-view>
+
+    </div>
+</body>
+<script>
+
+    var login = {
+        template: '<h3>这是登录页面</h3>'
+    }
+
+    var register = {
+        template: '<h3>这是注册页面</h3>'
+    }
+
+    var router = new VueRouter({
+        routes: [
+            {path: '/', redirect: '/login'},
+            {path: '/login', component: login},
+            {path: '/register', component: register}
+        ]
+    })
+
+    var vm = new Vue({
+        el: '#app',
+        data: {
+            firstname: '',
+            lastname: '',
+            fullname: ''
+        },
+        methods: {
+            getFullName(){
+                this.fullname = this.firstname + ' -- ' + this.lastname
+            }
+        },
+        router,
+        watch: {
+            //注意： 有两个参数，参数1是新输入的值，参数2是旧值
+            'lastname': function(newVal, oldVal){  //监视data中lastname的改变   (如果名称有 - 的话 一定要加上引号)
+                this.fullname = this.firstname + ' -- ' + this.lastname
+
+                console.log(newVal + '---' + oldVal);
+                
+            },
+            '$route.path': function(newVal, oldVal){
+                console.log(newVal + ' --> ' + oldVal);
+                
+            }
+        }
+    })
+</script>
+</html>

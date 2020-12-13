@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>路由布局</title>
+    <script src="./lib/vue.js"></script>
+    <script src="./lib/vue-router.js" ></script>
+    <style>
+        .container{
+            display: flex
+        }
+        .top{
+            background-color: red;
+        }
+        .left{
+            background-color: green;
+            flex: 2;
+        }
+        .right{
+            background-color: yellow;
+            flex: 2;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <router-view></router-view>
+        <div class="container" :test="test">
+
+            <!-- 这个name是属性， 所以里面的值是字符串，不是变量
+                如果是 v-bind: 或者 :  是绑定某个属性，解析出来的就是变量
+            -->
+            <router-view name="left"></router-view>
+            <router-view name="right"></router-view>
+        </div>
+    </div>
+
+    <!-- 上面 -->
+    <template id="top">
+        <h3 class="top">上面区域</h3>
+    </template>
+
+    <!-- 左边 -->
+    <template id="left">
+        <h3 class="left">左边区域</h3>
+    </template>
+    
+    <!-- 右边 -->
+    <template id="right">
+        <h3 class="right">右边区域</h3>
+    </template>
+
+</body>
+<script>
+
+    var topTmp = {
+        template: '#top'
+    }
+
+    var leftTmp = {
+        template: '#left'
+    }
+
+    var rightTmp = {
+        template: '#right'
+    }
+
+    var routerObj = new VueRouter({
+        routes: [
+            {
+                path: '/', 
+                components: {
+                    'default': topTmp,
+                    left: leftTmp,       //带不带引号都可以
+                    'right': rightTmp
+                }
+            }
+        ]
+    })
+
+    var vm = new Vue({
+        el: '#app',
+        data: {
+            test: ''
+        },
+        router: routerObj
+    })
+</script>
+</html>

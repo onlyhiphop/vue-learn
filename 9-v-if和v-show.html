@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue.js"></script>
+  
+</head>
+<body>
+    <div id="app">
+      <input type="button" v-model:value="value[index]" @click="show">
+
+      <h3 v-if="flag">v-if控制的元素</h3>
+      <h3 v-show="flag">v-show控制的元素</h3>
+
+      <!-- 区别：
+            v-if：是直接去操作标签元素，每次都是重新删除或者创建  （性能浪费多，频繁切换不要使用）
+            v-show: 只是在标签元素加上了 display: none （）
+        -->
+    </div>
+</body>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                flag: true,
+                value: ['显示', '隐藏'],
+                index: 1
+            },
+            methods: {
+                show(){
+                    this.flag = !this.flag;
+                    if(this.flag){
+                        this.index = 1;
+                    }else{
+                        this.index = 0;
+                    }
+                }
+            }
+        })
+    </script>
+</html>

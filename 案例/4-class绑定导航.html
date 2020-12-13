@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../lib/vue.js"></script>
+    <style>
+        .active{
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <ul>
+            <li v-for="(item, index) in tabList" 
+            :class="{active: currentPageIndex === index}"
+            @click="updateTab(index)"
+            >{{item}}}</li>
+        </ul>
+    </div>
+</body>
+<script>
+    const app = new Vue({
+        el: '#app',
+        data: {
+            tabList: ['页面1', '页面2', '页面3', '页面4'],
+            currentPageIndex: 0
+        },
+        methods: {
+            updateTab(index){
+                this.currentPageIndex = index;
+            }
+        }
+    })
+</script>
+</html>

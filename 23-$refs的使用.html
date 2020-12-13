@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./lib/vue.js"></script>
+</head>
+<body>
+    <!-- 
+        Vue不提倡直接操作dom，所以提供了一个寻找dom节点的 类 $refs
+
+        注意： $refs 也可以操作子组件：
+            1、可以 获取子组件的data值，执行子组件的methods中的方法
+            2、可以修改 data中的值
+
+     -->
+    <div id="app">
+        <h3 ref="h3">找到我呀，我是h3</h3>
+        <input type="text" name="" id="" v-model="refName">
+        <input type="button" value="寻找" @click="find">
+
+        <br>
+        <br>
+        <br>
+        子组件1：<tmp ref="tmp"></tmp>
+        子组件2：<tmp ref="tmp2"></tmp>
+        <input type="button" value="寻找子组件中的data和methods" @click="findSub">
+    </div>
+
+    <template id="tmp1">
+        <div>
+            <hr>
+            <h2>{{ msg }}</h2>
+        </div>
+    </template>
+</body>
+<script>
+
+    var tmp = {
+        template: '#tmp1',
+        data(){
+            return {
+                msg: '子组件'
+            }
+        },
+        methods: {
+            show(){
+                alert('子组件的show方法')
+            }
+        }
+    }
+
+    var vm = new Vue({
+        el: '#app',
+        data: {
+            refName: ''
+        },
+        methods: {
+            find(){
+                var refName = this.refName
+                //返回一个dom对象
+                var dom = this.$refs[refName]
+                alert(dom.innerHTML)
+            },
+            findSub(){
+                var subDom = this.$refs.tmp
+                console.log("子组件中msg的数据：");
+                console.log(subDom.msg);
+                //执行子组件中的show方法
+                subDom.show()
+
+                //修改msg值
+                subDom.msg = '使用refs修改子组件的msg值'
+
+            }
+        },
+        components: {
+            tmp
+        }
+    })
+</script>
+</html>

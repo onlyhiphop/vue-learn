@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vue响应式原理</title>
+    <script src="../lib/vue.js"></script>
+</head>
+<body>
+    <!-- 
+        1、app.message修改数据，Vue内部是如果监听message数据的改变
+            Object.defineProperty -> 监听对象属性的改变
+
+        2、当数据发生改变，VUe是如何知道要通知那些人，界面发生刷新。
+            发布订阅模式
+     -->
+    <div id="app">
+        {{ message }}
+    </div>
+    <script>
+        //内部取出data这个对象
+        const obj = {
+            message: '哈哈哈',
+            name: '小明'
+        }
+        Object.keys(obj).forEach(key => {
+            let value = obj[key]
+            //给某个对象定义属性
+            Object.defineProperties(obj, key, {
+                set(newValue){
+                    console.log('监听' + key + '的改变');
+                    value = newValue
+                },
+                get(){
+                    return value
+                }
+            })
+        })
+    </script>
+    <script>
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                message: '哈哈哈',
+                name: '小明'
+            }
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../lib/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <ul>
+            <li v-for="item in itemList">{{item}}</li>
+        </ul>
+        <button @click="pushClick" >push</button>
+        <button @click="updateList" >通过索引值修改数组中某个值</button>
+    </div>
+</body>
+<script>
+    const app = new Vue({
+        el: '#app',
+        data: {
+            itemList: ['a', 'b', 'c', 'd']
+        },
+        methods: {
+            pushClick(){
+                //页面重新渲染
+                this.itemList.push('push');  //在数组最后面添加元素
+                this.itemList.unshift('unshift', 'unshift');  //在数组最前面添加元素    
+
+                this.itemList.pop();  //删除最后一个
+                this.itemList.shift(); //删除数组中第一个
+
+
+                //splice作用：删除元素/插入元素/替换元素
+                //第一个参数，从哪里开始, 从0开始
+                //删除元素：第二个参数传入你要删除几个元素
+                this.itemList.splice(1, 1)  //从第一个开始，往后删除一个元素
+                this.itemList.splice(1)  //从第一个开始，删除后面所有元素
+
+                this.itemList.splice(1, 3, 'z', 'y', 'x')  //将第一个后面三个替换
+                
+                this.itemList.splice(1, 0, 'x', 'y', 'z') //在第一个后面插入三个元素 
+
+                this.itemList.sort()  //排序
+                this.itemList.reverse() //反转 
+            },
+            updateList(){
+                //这样的话，会发现页面不会重新渲染
+                this.itemList[0] = 'update'
+            }
+        }
+    })
+</script>
+</html>

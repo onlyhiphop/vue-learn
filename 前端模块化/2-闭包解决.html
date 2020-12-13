@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<!-- 
+		匿名函数自调用：
+		 使用闭包，让每个js文件都有自己的作用域，这样变量名就不会冲突
+		 
+		 但是衍生出了新的问题：代码不可复用了，可能重复的函数又要重新定义
+		 
+		 使用闭包向外return一个对象，来实现代码的复用
+		 -->
+	</body>
+	
+	<!-- 这里是主js文件 -->
+	<scrpit>
+		//这里我想要使用 B中的sum方法
+		moduleB.name
+		moduleB.sum(1, 2)
+	</scrpit>
+	
+	<!-- 这里是 A 写的js文件 -->
+	<scrpit>
+		;(function(){
+			var name = 'xiaoming';
+			console.log(name)
+		})()
+	</scrpit>
+	
+	<!-- 这里是 B写的js文件 -->
+	<scrpit>
+		;
+		var moduleB = (function(){
+			
+			//向外暴露一个对象
+			var obj = {}
+			
+			var name = 'xiaohong';
+			console.log(name)
+			
+			function sum(a,b){
+				return a + b;
+			}
+			
+			obj.name = name;
+			obj.sum = sum;
+		})()
+	</scrpit>
+	
+</html>

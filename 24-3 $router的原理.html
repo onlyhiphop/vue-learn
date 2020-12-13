@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script src="./lib/vue.js"></script>
+		<script src="./lib/vue-router.js" ></script>
+	</head>
+	<body>
+		<div id="app">
+			<!-- 
+				为什么可以直接在Vue对象中使用$router 
+				
+				只要引入了vue-router，它会自动在Vue对象的原型上挂上 $router 也就的VueRouter对象
+				
+				Vue.prototype.$router = functino(){
+					return new VueRouter()
+				}
+				
+				因为每个组件，其实都是Vue对象的实例，所有组件都可以使用Vue对象上的原型对象 $router
+			 -->
+			 {{ msg }}
+		</div>
+	</body>
+	<script>
+		
+		// 在Vue原型上声明函数，所有Vue对象都能使用
+		Vue.prototype.test = function(){
+			console.log('test.....')
+		}
+		
+		const vm = new Vue({
+			el: '#app',
+			data(){
+				
+			},
+			methods:{
+				
+			},
+			mounted(){
+				this.test();
+			}
+		})
+	</script>
+</html>
