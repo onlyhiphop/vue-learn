@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="./lib/vue.js"></script>
+</head>
+<body>
+    <!-- 
+      v-bind="$attrs"
+      本质：父组件以形如:foo="xxx"或者v-bind="{age:12}"传给子组件的属性，但凡没有被子组件的props接收的，都会被扔到子组件的$attrs里去。
+        （另外，被props指名接收的，都放入子组件的$props里。）
+        （把父组件的非props的值继续传递到后代）
+
+      v-on="$listeners"
+      本质：相当于对后代组件批量挂载了父组件对自己的事件监听。因此后代组件的emit会触发父组件的事件方法。（把父组件的方法继续传递到后代）
+     -->
+
+     <div id="app">
+      <top-tmp name="小明" age="18"></top-tmp>
+     </div>
+
+     <template id="top">
+      <div>
+        top ---
+        <cent-tmp></cent-tmp>
+      </div>
+     </template>
+
+     <template id="cent">
+      <div>
+        Cent： {{age}}
+        <!-- <foot-tmp v-bind="$attrs" v-on="$listeners"></foot-tmp> -->
+      </div>
+     </template>
+
+     <template id="foot">
+      <div>
+        Foot： {{ $attrs }}
+        <div>
+          name: {{ name }}
+          age: {{  age }}
+        </div>
+      </div>
+     </template>
+</body>
+<script>
+
+  var topTmp = {
+    template: '#top',
+    components: {
+      centTmp
+    }
+  }
+
+  var centTmp = {
+    template: '#cent',
+    props: {
+      age: String
+    },
+    components: {
+      footTmp
+    }
+  }
+
+  var footTmp = {
+    template: '#foot',
+    props: {
+      age: String,
+      name: String
+    }
+  }
+
+  const vm = new Vue({
+    el: '#app',
+    data: {
+
+    },
+    components: {
+      topTmp
+    }
+  })
+</script>
+</html>

@@ -13,22 +13,48 @@
                 1、通过属性绑定（v-bind:）的形式 把需要传递给自组件的数据，以属性绑定的形式 ，传递到子组件内部，供子组件使用
                     1.1 在子组件中绑定一个属性，指向父组件的data中的一个属性
                     2.2 子组件中props数组中 也要定义这个属性，这样才能使用
+
+                所以传入的静态的值默认是字符串，如果要传入 Number Boolean 类型的数据
+                必须将它变成动态的  也就是使用 v-bind 告诉Vue 这是一个js表达式，而不是一个字符串
          -->
-        <com1 v-bind:parentmsg="msg"></com1>
+        <com1 v-bind:parentmsg="msg" message="传入静态的值"></com1>
+
+        <!-- 
+            传入入一个对象的所有 property
+         -->
+        <com1 :name="p.name" :age="p.age"></com1>
+        <!-- 可以简写成以下形式 -->
+        <com1 v-bind="p"></com1>
+
+        <!-- 
+            
+            所有的 prop 都使得其父子 prop 之间形成了一个单向下行绑定（子组件不能改变prop中的值）
+
+            1、prop只是用来传递一个初始值，子组件可以定义一个data 并将这个prop用作其初始值
+            2、prop传入后子组件还需要转换，则可以定义一个 computed属性
+
+            注意在 JavaScript 中对象和数组是通过引用传入的，所以对于一个数组或对象类型的 prop 来说，在子组件中改变变更这个对象或数组本身将会影响到父组件的状态。
+         -->
+
+
     </div>
 </body>
 <script>
     var vm = new Vue({
         el: '#app',
         data: {
-            msg: '父组件的值'
+            msg: '父组件的值',
+            p: {
+                name: '',
+                age: ''
+            }
         },
         methods: {
 
         },
         components: {  //子组件默认无法访问到父组件中的 data上的数据 和 methods中的方法
             com1: {
-                template: '<h3 @click="change">这是组件1 --- 取值 {{msg}} </h3>',
+                template: '<h3 @click="change">这是组件1 --- 取值 {{parentmsg}} </h3>',
 
                 //数组形式
                 // props: ['parentmsg'],   //这里的是父组件传过来的, 是只读的
@@ -51,13 +77,26 @@
                         type: String,
                         default: '默认消息'
                     },
-                    multiMessage: ['String', 'Array']   //可以是多个类型, 也可以是自定义类型的
+                    multiMessage: ['String', 'Array'],   //可以是多个类型, 也可以是自定义类型的
+                    checkValue: {   //自定义验证函数
+                        validator: function(value){
+                            //这个值必须匹配下列字符串中的一个
+                            return ['success', 'warning', 'danger'].indexOf(value) !== -1
+                        }
+                    }
                 },
 
                 data(){  //data中的数据是组件私有的，可读可写的
                     return {
                         title: '标题',
-                        content: '内容'
+                        content: '内容',
+                        subMsg: this.parentmsg
+                    }
+                },
+
+                computed: {
+                    subComputeMsg(){
+                        return this.parentmsg.trim().toLowerCase()
                     }
                 },
 

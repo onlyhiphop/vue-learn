@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="../lib/vue.js"></script>
+</head>
+<body>
+  <div id="app">
+    <div style="width: 100px; height: 100px; background-color: red;" v-show="isShow">
+      父区域
+
+      <!-- <child @update-show="changeShow1"></child> -->
+      <child :is-show.sync="isShow"></child>
+    </div>
+    
+
+    <hr>
+    <div>prop实现双向绑定</div>
+    
+    
+  </div>
+  
+  <template id="child">
+      <div style="width: 100px; height: 100px; background-color: green;">
+        我是子组件----
+        <button @click="changeShow2">隐藏</button>
+      </div>
+  </template>
+  
+
+</body>
+<script>
+  const child = {
+    template: '#child',
+    data(){
+      return {
+        
+      }
+    },
+    methods: {
+      changeShow2(){
+        // this.$emit('update-show', false)
+        this.$emit('update:is-show', false)
+      }
+    }
+  }
+
+  const vm = new Vue({
+    el: '#app',
+    components: {
+      child
+    },
+    data: {
+      isShow: true
+    },
+    methods: {
+      changeShow1(val){
+        this.isShow = val
+      }
+    },
+    created(){
+
+    }
+  })
+</script>
+</html>

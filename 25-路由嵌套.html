@@ -44,6 +44,10 @@
         template: '#register'
     }
 
+    /*
+        注意：子路由的path不能加/ ，不然会识别成根路由
+    */
+
     var routerObj = new VueRouter({
         routes: [
             {

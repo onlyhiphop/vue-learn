@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="./lib/vue.js"></script>
+</head>
+<body>
+  <!-- 
+    1、对于子组件没有定义的prop属性，它会自动加入到子组件的根元素上
+
+    对于class属性，如果都有，则会合并
+    对于name和id等属性，它会覆盖
+
+    2、禁止继承：inheritAttrs: false
+      加了这个东西，子组件中必须要用props来接受，不然不会自动加入子组件的属性中
+      注意：这个不会禁用 class 和 style 的继承
+
+    
+   -->
+   <div id="app">
+    <!-- 这里的name属性直接加到了tmp的根元素input上 -->
+    <tmp name="subName" class="pClass"></tmp> 
+    
+   </div>
+
+   <template id="tmp">
+    <input type="text" class="sClass">
+   </template>
+</body>
+<script>
+  var tmp = {
+    template: '#tmp',
+    inheritAttrs: false,
+    props: {
+      name: ''
+    }
+  }
+
+  const vm = new Vue({
+    el: '#app',
+    data: {
+
+    },
+    components: {
+      tmp
+    }
+  })
+</script>
+</html>

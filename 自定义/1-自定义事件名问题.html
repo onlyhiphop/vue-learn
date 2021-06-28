@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="../lib/vue.js" ></script>
+</head>
+<body>
+    <!-- 
+
+      注意：
+      
+      v-on (@)  事件监听器在dom模板中会被自动转换成全小写
+
+      这里  @myEvent 最终会变成 @myevent
+      而 this.$emit('myEvent') 就不会调用到
+
+     -->
+
+     <div id="app">
+
+
+      <!-- <tmp @my-event="show"></tmp> -->
+
+      <tmp @myEvent="show"></tmp>
+
+     </div>
+
+     <template id="t1">
+        <button @click="btnEvent">触发父组件事件</button>
+     </template>
+
+</body>
+<script>
+
+    var tmp = {
+      template: '#t1',
+      data(){
+        return {
+
+        }
+      },
+      methods: {
+        btnEvent(){
+          this.$emit('myEvent')
+        }
+      }
+    }
+
+    const vm = new Vue({
+      el: '#app',
+      data: {
+
+      },
+      methods: {
+        show(){
+          alert('show------')
+        }
+      },
+      components: {
+        tmp
+      },
+      created(){
+
+      },
+      mounted(){
+
+      }
+    })
+</script>
+</html>
